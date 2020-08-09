@@ -6,8 +6,8 @@ module.exports = (app) => {
 
   app.put("/player/:playerId", player.update);
 
-  // Retrieve a single Game with customerId
-  // app.get("/player/:playerId", game.findOne);
+  //Retrieve allplayers by GameId
+  app.get("/player/:gameId", player.findAll);
 
   // Update a Game with gameId
   //   app.put("/customers/:customerId", game.update);

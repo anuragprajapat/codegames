@@ -54,3 +54,16 @@ exports.update = (req, res) => {
     }
   );
 };
+
+// Find a single Game with a customerId
+exports.findAll = (req, res) => {
+  Player.findAll(req.params.gameId, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Some error occurred while creating the game.",
+      });
+    else {
+      res.send(data);
+    }
+  });
+};

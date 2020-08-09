@@ -26,7 +26,7 @@ exports.create = (req, res) => {
   });
 };
 
-// Find a single Game with a customerId
+// Find a single Game with a gameId
 exports.findOne = (req, res) => {
   Game.findById(req.params.gameId, (err, data) => {
     if (err)
