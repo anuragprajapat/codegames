@@ -12,8 +12,8 @@ exports.create = (req, res) => {
 
   // Create a Game
   const game = new Game({
-    GAME_ID: uuidv1(),
-    ROOM_NAME: req.body.roomName,
+    gameId: uuidv1(),
+    roomName: req.body.roomName,
   });
 
   // Save Game in the database
@@ -29,6 +29,30 @@ exports.create = (req, res) => {
 // Find a single Game with a gameId
 exports.findOne = (req, res) => {
   Game.findById(req.params.gameId, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Some error occurred while fetching the game.",
+      });
+    else {
+      res.send(data);
+    }
+  });
+};
+
+exports.updateGame = (req, res) => {
+  Game.update({ ...req.body, gameId: req.params.gameId }, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Some error occurred while creating the game.",
+      });
+    else {
+      res.send(data);
+    }
+  });
+};
+
+exports.recordClue = (req, res) => {
+  Game.recordClue({ ...req.body, gameId: req.params.gameId }, (err, data) => {
     if (err)
       res.status(500).send({
         message: err.message || "Some error occurred while creating the game.",

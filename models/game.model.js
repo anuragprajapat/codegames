@@ -3,14 +3,14 @@ const { GAME_STATUS } = require("../constants");
 
 // constructor
 const Game = function (game) {
-  this.GAME_ID = game.GAME_ID;
-  this.ROOM_NAME = game.ROOM_NAME;
-  this.STATUS = GAME_STATUS.WAITING_TO_START;
-  this.WORD_MATRIX_ID = "";
-  this.BLUE_WORDS_REMAINING = 7;
-  this.RED_WORDS_REMAINING = 8;
-  this.CLUE_WORD = "";
-  this.CLUE_COUNT = 0;
+  this.gameId = game.gameId;
+  this.roomName = game.roomName;
+  this.status = GAME_STATUS.WAITING_TO_START;
+  this.wordMatrixId = "";
+  this.blueWordsRemaining = 7;
+  this.redWordsRemaining = 8;
+  this.clueWord = "";
+  this.clueCount = 0;
 };
 
 Game.create = (newGame, result) => {
@@ -27,7 +27,7 @@ Game.create = (newGame, result) => {
 };
 
 Game.findById = (gameId, result) => {
-  sql.query(`SELECT * FROM GAME WHERE GAME_ID = '${gameId}'`, (err, res) => {
+  sql.query(`SELECT * FROM GAME WHERE gameId = '${gameId}'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -41,35 +41,43 @@ Game.findById = (gameId, result) => {
       // get the all player data
     }
     // not found game with the id
-    result({ kind: "not_found" }, null);
+    result({ message: "not_found" }, null);
   });
 };
 
-// Game.updateById = (gameId, game, result) => {
-//   sql.query(
-//     "UPDATE GAME SET email = ?, name = ?, active = ? WHERE id = ?",
-//     [game.email, customer.name, customer.active, id],
-//     (err, res) => {
-//       if (err) {
-//         console.log("error: ", err);
-//         result(null, err);
-//         return;
-//       }
+Game.update = (game, result) => {
+  sql.query(
+    "UPDATE GAME SET status = ?, wordMatrixId = ?, blueWordsRemaining = ?, redWordsRemaining = ?, clueWord= ?, clueCount=? WHERE gameId = ?",
+    [
+      game.status,
+      game.wordMatrixId,
+      game.blueWordsRemaining,
+      game.redWordsRemaining,
+      game.clueWord,
+      game.clueCount,
+      game.gameId,
+    ],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
 
-//       if (res.affectedRows == 0) {
-//         // not found Customer with the id
-//         result({ kind: "not_found" }, null);
-//         return;
-//       }
+      if (res.affectedRows == 0) {
+        // not found Player with the id
+        result({ kind: "not_found" }, null);
+        return;
+      }
 
-//       console.log("updated customer: ", { id: id, ...customer });
-//       result(null, { id: id, ...customer });
-//     }
-//   );
-// };
+      console.log("updated game: ", { ...game });
+      result(null, { ...game });
+    }
+  );
+};
 
 Game.remove = (gameId, result) => {
-  sql.query("DELETE FROM GAME WHERE GAME_ID = ?", gameId, (err, res) => {
+  sql.query("DELETE FROM GAME WHERE gameId = ?", gameId, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);

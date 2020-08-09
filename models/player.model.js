@@ -2,12 +2,12 @@ const sql = require("./../db");
 
 // constructor
 const Player = function (player) {
-  this.PLAYER_ID = player.playerId;
-  this.PLAYER_NAME = player.playerName;
-  this.GAME_ID = player.gameId;
-  this.TEAM_COLOR = player.teamColor;
-  this.IS_GAME_MANAGER = player.isGameManager;
-  this.IS_SPY_MASTER = player.isSpyMaster;
+  this.playerId = player.playerId;
+  this.playerName = player.playerName;
+  this.gameId = player.gameId;
+  this.teamColor = player.teamColor;
+  this.isGameManager = player.isGameManager;
+  this.isSpyMaster = player.isSpyMaster;
 };
 
 Player.create = (newPlayer, result) => {
@@ -25,8 +25,8 @@ Player.create = (newPlayer, result) => {
 
 Player.updateById = (player, result) => {
   sql.query(
-    "UPDATE PLAYER SET TEAM_COLOR = ?, IS_SPY_MASTER = ? WHERE PLAYER_ID = ?",
-    [player.TEAM_COLOR, player.IS_SPY_MASTER, player.PLAYER_ID],
+    "UPDATE PLAYER SET teamColor = ?, isSpyMaster = ? WHERE playerId = ?",
+    [player.teamColor, player.isSpyMaster, player.playerId],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -36,7 +36,7 @@ Player.updateById = (player, result) => {
 
       if (res.affectedRows == 0) {
         // not found Player with the id
-        result({ kind: "not_found" }, null);
+        result({ kind: "Not Updated" }, null);
         return;
       }
 
@@ -47,7 +47,7 @@ Player.updateById = (player, result) => {
 };
 
 Player.findAll = (gameId, result) => {
-  sql.query(`SELECT * FROM PLAYER WHERE GAME_ID = '${gameId}'`, (err, res) => {
+  sql.query(`SELECT * FROM PLAYER WHERE gameId = '${gameId}'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
