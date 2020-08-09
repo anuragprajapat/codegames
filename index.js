@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 require("./routes/game.routes")(app);
 require("./routes/player.routes")(app);
+require("./routes/wordMatrix.routes")(app);
 
 app.listen(config.app.port, (err) => {
   if (err) {

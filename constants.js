@@ -10,6 +10,8 @@ const GAME_STATUS = {
 const TEAM = {
   RED: "RED",
   BLUE: "BLUE",
+  YELLOW: "YELLOW",
+  BLACK: "BLACK",
 };
 
 module.exports = { GAME_STATUS, TEAM };

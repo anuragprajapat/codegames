@@ -1,7 +1,5 @@
-import { v1 as uuidv1 } from "uuid";
-
-function generateUUID() {
-  return uuidv1();
+function getRandomizer(bottom, top) {
+  return Math.floor(Math.random() * (1 + top - bottom)) + bottom;
 }
 
-module.exports = { generateUUID };
+module.exports = { getRandomizer };
