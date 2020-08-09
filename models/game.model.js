@@ -22,24 +22,24 @@ Game.create = (newGame, result) => {
     }
 
     console.log("created game: ", { id: res.insertId, ...newGame });
-    result(null, { id: res.insertId, ...newGame });
+    result(null, { ...newGame });
   });
 };
 
 Game.findById = (gameId, result) => {
-  sql.query(`SELECT * FROM GAME WHERE GAME_ID = ${gameId}`, (err, res) => {
+  sql.query(`SELECT * FROM GAME WHERE GAME_ID = '${gameId}'`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
       return;
     }
-
+    // if game is found
     if (res.length) {
       console.log("found game: ", res[0]);
       result(null, res[0]);
       return;
+      // get the all player data
     }
-
     // not found game with the id
     result({ kind: "not_found" }, null);
   });

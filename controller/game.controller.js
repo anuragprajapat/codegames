@@ -26,10 +26,18 @@ exports.create = (req, res) => {
   });
 };
 
-exports.getGameInfo = (req, res) => {};
-
 // Find a single Game with a customerId
-exports.findOne = (req, res) => {};
+exports.findOne = (req, res) => {
+  Game.findById(req.params.gameId, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Some error occurred while creating the game.",
+      });
+    else {
+      res.send(data);
+    }
+  });
+};
 
 // Update a Customer identified by the customerId in the request
 // exports.update = (req, res) => {
