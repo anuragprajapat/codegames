@@ -12,10 +12,10 @@ exports.create = (req, res) => {
 
   // Create a Player
   const player = new Player({
-    PLAYER_ID: uuidv1(),
-    PLAYER_NAME: req.body.playerName,
-    GAME_ID: req.body.gameId,
-    IS_GAME_MANAGER: req.body.isGameManager,
+    playerId: uuidv1(),
+    playerName: req.body.playerName,
+    gameId: req.body.gameId,
+    isGameManager: req.body.isGameManager,
   });
 
   // Save Player in the database
@@ -27,4 +27,30 @@ exports.create = (req, res) => {
       });
     else res.send(data);
   });
+};
+
+exports.update = (req, res) => {
+  // Validate Request
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content can not be empty!",
+    });
+  }
+
+  Player.updateById(
+    new Player({ ...req.body, playerId: req.params.playerId }),
+    (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found Customer with id ${req.params.playerId}.`,
+          });
+        } else {
+          res.status(500).send({
+            message: "Error updating Customer with id " + req.params.playerId,
+          });
+        }
+      } else res.send(data);
+    }
+  );
 };

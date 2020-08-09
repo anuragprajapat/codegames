@@ -4,6 +4,8 @@ module.exports = (app) => {
   // Create a new Game
   app.post("/player", player.create);
 
+  app.put("/player/:playerId", player.update);
+
   // Retrieve a single Game with customerId
   // app.get("/player/:playerId", game.findOne);
 

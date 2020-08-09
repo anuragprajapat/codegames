@@ -2,12 +2,12 @@ const sql = require("./../db");
 
 // constructor
 const Player = function (player) {
-  this.PLAYER_ID = player.PLAYER_ID;
-  this.PLAYER_NAME = player.PLAYER_NAME;
-  this.GAME_ID = player.GAME_ID;
-  this.TEAM_COLOR = "";
-  this.IS_GAME_MANAGER = player.IS_GAME_MANAGER;
-  this.IS_SPY_MASTER = "N";
+  this.PLAYER_ID = player.playerId;
+  this.PLAYER_NAME = player.playerName;
+  this.GAME_ID = player.gameId;
+  this.TEAM_COLOR = player.teamColor;
+  this.IS_GAME_MANAGER = player.isGameManager;
+  this.IS_SPY_MASTER = player.isSpyMaster;
 };
 
 Player.create = (newPlayer, result) => {
@@ -18,9 +18,32 @@ Player.create = (newPlayer, result) => {
       return;
     }
 
-    console.log("created player: ", { insertId: res.insertId, ...newPlayer });
-    result(null, { insertId: res.insertId, ...newPlayer });
+    console.log("created player: ", { ...newPlayer });
+    result(null, { ...newPlayer });
   });
+};
+
+Player.updateById = (player, result) => {
+  sql.query(
+    "UPDATE PLAYER SET TEAM_COLOR = ?, IS_SPY_MASTER = ? WHERE PLAYER_ID = ?",
+    [player.TEAM_COLOR, player.IS_SPY_MASTER, player.PLAYER_ID],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        // not found Player with the id
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("updated player: ", { ...player });
+      result(null, { ...player });
+    }
+  );
 };
 
 module.exports = Player;
