@@ -44,4 +44,27 @@ WordMatrix.getwordMatrixByGameId = (gameId, result) => {
   );
 };
 
+WordMatrix.updateById = (wordMatrix, result) => {
+  sql.query(
+    "UPDATE WORD_MATRIX SET marked = ?  WHERE gameId = ? AND matrixId = ?",
+    ["Y", wordMatrix.gameId, wordMatrix.matrixId],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        // not found Player with the id
+        result({ kind: "Not Updated" }, null);
+        return;
+      }
+
+      console.log("updated word matrix: ", { ...wordMatrix });
+      result(null, { ...wordMatrix });
+    }
+  );
+};
+
 module.exports = WordMatrix;

@@ -194,7 +194,6 @@ exports.create = async (req, res) => {
   }
 };
 
-// Find a single Game with a customerId
 exports.getwordMatrixByGameId = (req, res) => {
   WordMatrix.getwordMatrixByGameId(req.params.gameId, (err, data) => {
     if (err)
@@ -206,4 +205,30 @@ exports.getwordMatrixByGameId = (req, res) => {
       res.send(data);
     }
   });
+};
+
+exports.recordResponse = (req, res) => {
+  // Validate Request
+  if (!req.body) {
+    res.status(400).send({
+      message: "Content can not be empty!",
+    });
+  }
+
+  WordMatrix.updateById(
+    new WordMatrix({ ...req.body, gameId: req.params.gameId }),
+    (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found Customer with id ${req.params.gameId}.`,
+          });
+        } else {
+          res.status(500).send({
+            message: "Error updating Customer with id " + req.params.gameId,
+          });
+        }
+      } else res.send(data);
+    }
+  );
 };
