@@ -3,4 +3,5 @@ module.exports = (app) => {
 
   // Create a new word matrix
   app.post("/wordMatrix/:gameId", wordMatrix.create);
+  app.get("/wordMatrix/:gameId", wordMatrix.getwordMatrixByGameId);
 };

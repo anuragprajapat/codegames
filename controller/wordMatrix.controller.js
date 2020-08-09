@@ -193,3 +193,17 @@ exports.create = async (req, res) => {
     });
   }
 };
+
+// Find a single Game with a customerId
+exports.getwordMatrixByGameId = (req, res) => {
+  WordMatrix.getwordMatrixByGameId(req.params.gameId, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while fetching word Matrix",
+      });
+    else {
+      res.send(data);
+    }
+  });
+};

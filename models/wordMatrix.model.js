@@ -22,4 +22,26 @@ WordMatrix.create = (newPlayer, result) => {
   });
 };
 
+WordMatrix.getwordMatrixByGameId = (gameId, result) => {
+  sql.query(
+    `SELECT * FROM WORD_MATRIX WHERE gameId = '${gameId}'`,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+      // if game is found
+      if (res.length) {
+        console.log("found game: ", res);
+        result(null, res);
+        return;
+        // get the all player data
+      }
+      // not found game with the id
+      result({ kind: "not_found" }, null);
+    }
+  );
+};
+
 module.exports = WordMatrix;
